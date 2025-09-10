@@ -1,4 +1,4 @@
-# WhatsApp Duplicate File Cleaner
+# WhatsApp Duplicate File Detector
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@
 
 ## Project Overview
 
-WhatsApp and other messaging apps create automatic backups that often contain duplicate files. These duplicates can waste storage space and make it harder to organize your media and documents. This Python project identifies and lists duplicate files in a backup folder, helping you clean them efficiently.
+WhatsApp and other messaging apps create automatic backups that often contain duplicate files. These duplicates can waste storage space and make it harder to organize your media and documents. This Python project identifies duplicate files in a backup folder, helping you clean them efficiently.
 
 ## Problem Statement
 
