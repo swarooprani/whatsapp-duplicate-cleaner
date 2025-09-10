@@ -36,4 +36,4 @@ def remove_duplicates(folder):
 if __name__ == "__main__":
     folder = "sample_backup"
     remove_duplicates(folder)
-    print("✅ Duplicate check complete. Duplicates moved to 'Duplicates/' folder.")
+    print("Duplicate check complete. Duplicates moved to 'Duplicates/' folder.")
