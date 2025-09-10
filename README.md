@@ -1,125 +1,121 @@
-# WhatsApp Duplicate Cleaner 🧹
-
-A Python script to detect and remove duplicate files in WhatsApp or mobile backup folders, helping you free up storage space and organize your media efficiently.
-
----
+# WhatsApp Duplicate File Cleaner
 
 ## Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Sample Data](#sample-data)
-5. [Usage](#usage)
-6. [Example Output](#example-output)
-7. [Contributing](#contributing)
+- [Project Overview](#project-overview)
+- [Problem Statement](#problem-statement)
+- [Solution Concept](#solution-concept)
+- [Features](#features)
+- [Installation](#installation)
+- [Sample Data and Files](#sample-data-and-files)
+- [Code](#code)
+- [Example Output](#example-output)
 
----
 
 ## Project Overview
 
-This project scans a backup folder containing WhatsApp or mobile media files and identifies duplicates based on file content. It can help you:
+WhatsApp and other messaging apps create automatic backups that often contain duplicate files. These duplicates can waste storage space and make it harder to organize your media and documents. This Python project identifies and lists duplicate files in a backup folder, helping you clean them efficiently.
 
-* Free up storage by removing duplicates
-* Organize your photos, videos, and documents efficiently
-* Quickly analyze backup folders without manual searching
+## Problem Statement
 
----
+In reality, phones automatically store media and documents in backup folders. Over time, duplicates accumulate due to multiple downloads, forwards, or edits. Manual cleanup is tedious, and existing tools often don’t provide clear insights into duplicates before deletion.
+
+## Solution Concept
+
+This project scans a backup folder, identifies files with the same content, and lists them for review. You can then decide which duplicates to remove. The program is simple, beginner-friendly, and can be extended to automatically delete duplicates if desired.
 
 ## Features
 
-* Detects duplicate files across multiple folders
-* Works with Photos, Videos, and Documents
-* Generates a summary of duplicates before removal
-* Safe deletion (optional: only remove after confirmation)
-
----
+- Identify duplicate files based on content.
+- Works with any file type (text, images, videos, documents).
+- Provides a clear list of duplicates grouped by their content.
+- Can be extended to delete duplicates safely.
 
 ## Installation
 
-1. **Clone the repository:**
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/swarooprani/whatsapp-duplicate-cleaner.git
+```
+
+## 2. Navigate to the project folder:
+
+```bash
 cd whatsapp-duplicate-cleaner
 ```
 
-2. **Create a virtual environment (optional but recommended):**
+## 3. Make sure you have Python 3 installed. No external libraries are required.
 
+## Sample Data and Files
+
+Create a folder structure like this for testing:
 ```bash
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-```
-
-3. **Install dependencies:**
-
-```bash
-pip install -r requirements.txt
-```
-
-4. **Run the script:**
-
-```bash
-python duplicate_cleaner.py
-```
-
----
-
-## Sample Data
-
-The repository includes a small `sample_backup/` folder for testing.
-Structure of the sample backup:
-
-```
 sample_backup/
 ├── Photos/
-│   ├── IMG_20250101.txt
-│   ├── IMG-20250101-WA0001.txt  # duplicate
-│   ├── IMG_20250102.txt
-│   ├── IMG_20250102 (1).txt     # duplicate
+│   ├── IMG_20250101.txt          (content: "Holiday photo")
+│   ├── IMG-20250101-WA0001.txt   (duplicate)
+│   ├── IMG_20250102.txt          (content: "Office party")
+│   ├── IMG_20250102 (1).txt      (duplicate)
 ├── Documents/
-│   ├── Report.txt
-│   ├── Report (1).txt           # duplicate
+│   ├── Report.txt                (content: "Annual Report 2025")
+│   ├── Report (1).txt            (duplicate)
 ├── Videos/
-│   ├── Meeting.txt
-│   ├── Meeting (copy).txt       # duplicate
+│   ├── Meeting.txt               (content: "Project meeting recording")
+│   ├── Meeting (copy).txt        (duplicate)
 ```
 
-**Note:** These are text files for demonstration. The script works similarly with actual media files.
+You can create these files manually or programmatically using the provided script.
 
----
+##Code
+```bash
+import os
+import hashlib
+from collections import defaultdict
 
-## Usage
+def hash_file(filepath):
+    hasher = hashlib.md5()
+    with open(filepath, 'rb') as f:
+        buf = f.read()
+        hasher.update(buf)
+    return hasher.hexdigest()
 
-1. Place your backup folder path in the script or run it from the folder containing your backup.
-2. The script will scan for duplicates across all subfolders.
-3. A summary will be displayed showing duplicates for review before deletion.
+def find_duplicates(folder_path):
+    duplicates = defaultdict(list)
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            file_hash = hash_file(file_path)
+            duplicates[file_hash].append(file_path)
+    return {k: v for k, v in duplicates.items() if len(v) > 1}
 
----
+folder = 'sample_backup'
+duplicates = find_duplicates(folder)
 
-## Example Output
-
+print("Duplicate files found:")
+for file_hash, files in duplicates.items():
+    print("\nGroup:")
+    for f in files:
+        print(f"- {f}")
 ```
+##Example Output
+```bash
 Duplicate files found:
-- sample_backup/Photos/IMG-20250101-WA0001.txt
+Group:
 - sample_backup/Photos/IMG_20250101.txt
-- sample_backup/Documents/Report (1).txt
-- sample_backup/Documents/Report.txt
-- sample_backup/Videos/Meeting (copy).txt
-- sample_backup/Videos/Meeting.txt
+- sample_backup/Photos/IMG-20250101-WA0001.txt
 
-Total duplicates: 6
+Group:
+- sample_backup/Photos/IMG_20250102.txt
+- sample_backup/Photos/IMG_20250102 (1).txt
+
+Group:
+- sample_backup/Documents/Report.txt
+- sample_backup/Documents/Report (1).txt
+
+Group:
+- sample_backup/Videos/Meeting.txt
+- sample_backup/Videos/Meeting (copy).txt
 ```
 
----
-
-## Contributing
-
-Contributions are welcome!
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature-name`)
-3. Commit your changes (`git commit -m 'Add feature'`)
-4. Push to the branch (`git push origin feature-name`)
-5. Open a Pull Request
 
