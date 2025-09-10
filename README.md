@@ -67,7 +67,7 @@ sample_backup/
 
 You can create these files manually or programmatically using the provided script.
 
-##Code
+## Code
 ```bash
 import os
 import hashlib
@@ -98,24 +98,29 @@ for file_hash, files in duplicates.items():
     for f in files:
         print(f"- {f}")
 ```
-##Example Output
+## Sample folder content:
 ```bash
-Duplicate files found:
-Group:
-- sample_backup/Photos/IMG_20250101.txt
-- sample_backup/Photos/IMG-20250101-WA0001.txt
+Dictionary of files with paths and their content
+files = {
+    "sample_backup/Photos/IMG_20250101.txt": "Holiday photo",
+    "sample_backup/Photos/IMG-20250101-WA0001.txt": "Holiday photo",   # duplicate
+    "sample_backup/Photos/IMG_20250102.txt": "Office party",
+    "sample_backup/Photos/IMG_20250102 (1).txt": "Office party",       # duplicate
+    "sample_backup/Documents/Report.txt": "Annual Report 2025",
+    "sample_backup/Documents/Report (1).txt": "Annual Report 2025",    # duplicate
+    "sample_backup/Videos/Meeting.txt": "Project meeting recording",
+    "sample_backup/Videos/Meeting (copy).txt": "Project meeting recording",  # duplicate
+}
+```
+## Example Output
+```bash
+Duplicate found: Report.txt → moving to Duplicates/
+Duplicate found: IMG_20250101.txt → moving to Duplicates/
+Duplicate found: IMG_20250102.txt → moving to Duplicates/
+Duplicate found: Meeting.txt → moving to Duplicates/
+Duplicate check complete. Duplicates moved to 'Duplicates/' folder.
 
-Group:
-- sample_backup/Photos/IMG_20250102.txt
-- sample_backup/Photos/IMG_20250102 (1).txt
 
-Group:
-- sample_backup/Documents/Report.txt
-- sample_backup/Documents/Report (1).txt
-
-Group:
-- sample_backup/Videos/Meeting.txt
-- sample_backup/Videos/Meeting (copy).txt
 ```
 
 
